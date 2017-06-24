@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import rospy
 import roslib
-
+import sys
 import web
 import os
 import json
@@ -66,11 +66,13 @@ class InfoTerminalGUI(web.application):
             '/news', 'Events',
             '/go_away', 'GoAway',
             '/photos/(.*)', 'PhotoAlbum',
-            '/photos', 'PhotoAlbum'
+            '/photos', 'PhotoAlbum', 
+            '/robotweek', 'Robotweek'
         )
         self.strings = TranslatedStrings(language)
         web.application.__init__(self, self.urls, globals())
         print globals()
+
         signal.signal(signal.SIGINT, self._signal_handler)
 
         # A ROS publisher for click-feedback
@@ -134,6 +136,11 @@ class ERF(object):
         app.publish_feedback("erf")
         return render.erf(app.strings)
 
+
+class Robotweek(object):
+    def GET(self):
+        app.publish_feedback("robotweek")
+        return render.robotweek(app.strings)
 
 
 class Weather(object):
